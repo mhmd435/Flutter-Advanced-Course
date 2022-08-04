@@ -4,8 +4,10 @@ import 'package:flutter_advanced_course/features/feature_weather/data/repository
 import 'package:flutter_advanced_course/features/feature_weather/domain/use_cases/get_current_weather_usecase.dart';
 
 import 'core/widgets/main_wrapper.dart';
+import 'locator.dart';
 
-void main() {
+void main() async {
+  await setup();
   runApp(const MyApp());
 }
 
