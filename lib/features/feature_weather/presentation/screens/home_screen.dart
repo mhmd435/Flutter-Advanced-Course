@@ -112,7 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       color: Colors.grey,),
                                                   ),
                                                   const SizedBox(height: 10,),
-                                                  Text("${currentCityEntity.main!.tempMax!.round()}\u00B0",                                                    style: const TextStyle(
+                                                  Text("${currentCityEntity.main!.tempMax!.round()}\u00B0",
+                                                    style: const TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.white,),)
                                                 ],
@@ -139,7 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       color: Colors.grey,),
                                                   ),
                                                   const SizedBox(height: 10,),
-                                                  Text("${currentCityEntity.main!.tempMin!.round()}\u00B0",                                                    style: const TextStyle(
+                                                  Text("${currentCityEntity.main!.tempMin!.round()}\u00B0",
+                                                    style: const TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.white,),)
                                                 ],
