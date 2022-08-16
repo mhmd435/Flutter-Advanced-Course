@@ -6,6 +6,10 @@ import 'package:flutter_advanced_course/features/feature_weather/data/models/cur
 import 'package:flutter_advanced_course/features/feature_weather/domain/entities/current_city_entity.dart';
 import 'package:flutter_advanced_course/features/feature_weather/domain/repository/weather_repository.dart';
 
+import '../../../../core/params/ForecastParams.dart';
+import '../../domain/entities/forecase_days_entity.dart';
+import '../models/ForcastDaysModel.dart';
+
 class WeatherRepositoryImpl extends WeatherRepository{
   ApiProvider apiProvider;
 
@@ -15,9 +19,7 @@ class WeatherRepositoryImpl extends WeatherRepository{
   Future<DataState<CurrentCityEntity>> fetchCurrentWeatherData(String cityName) async {
 
     try{
-
       Response response = await apiProvider.callCurrentWeather(cityName);
-
       if(response.statusCode == 200){
         CurrentCityEntity currentCityEntity = CurrentCityModel.fromJson(response.data);
 
@@ -30,4 +32,21 @@ class WeatherRepositoryImpl extends WeatherRepository{
     }
   }
 
+
+  @override
+  Future<DataState<ForecastDaysEntity>> fetchForecastWeatherData(ForecastParams params) async {
+    try{
+      Response response = await apiProvider.sendRequest7DaysForcast(params);
+
+      if(response.statusCode == 200){
+        ForecastDaysEntity forecastDaysEntity = ForecastDaysModel.fromJson(response.data);
+        return DataSuccess(forecastDaysEntity);
+      }else{
+        return const DataFailed("Something Went Wrong. try again...");
+      }
+    }catch(e){
+      print(e.toString());
+      return const DataFailed("please check your connection...");
+    }
+  }
 }

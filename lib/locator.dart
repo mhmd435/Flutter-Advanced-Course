@@ -6,6 +6,8 @@ import 'package:flutter_advanced_course/features/feature_weather/domain/use_case
 import 'package:flutter_advanced_course/features/feature_weather/presentation/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import 'features/feature_weather/domain/use_cases/get_forecast_weather_usecase.dart';
+
 GetIt locator = GetIt.instance;
 
 setup(){
@@ -16,6 +18,8 @@ setup(){
 
   /// use case
   locator.registerSingleton<GetCurrentWeatherUseCase>(GetCurrentWeatherUseCase(locator()));
+  locator.registerSingleton<GetForecastWeatherUseCase>(GetForecastWeatherUseCase(locator()));
 
-  locator.registerSingleton<HomeBloc>(HomeBloc(locator()));
+
+  locator.registerSingleton<HomeBloc>(HomeBloc(locator(),locator()));
 }
