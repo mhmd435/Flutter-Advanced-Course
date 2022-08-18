@@ -1,12 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_course/core/widgets/app_background.dart';
+import 'package:flutter_advanced_course/features/feature_weather/domain/use_cases/get_suggestion_city_usecase.dart';
+import 'package:flutter_advanced_course/locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../core/params/ForecastParams.dart';
 import '../../../../core/widgets/dot_loading_widget.dart';
 import '../../data/models/ForcastDaysModel.dart';
+import '../../data/models/suggest_city_model.dart';
 import '../../domain/entities/current_city_entity.dart';
 import '../../domain/entities/forecase_days_entity.dart';
 import '../bloc/cw_status.dart';
@@ -22,6 +26,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController textEditingController = TextEditingController();
+
+  GetSuggestionCityUseCase getSuggestionCityUseCase = GetSuggestionCityUseCase(locator());
 
   String cityName = "Tehran";
   final PageController _pageController = PageController();
@@ -46,8 +53,52 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: height * 0.02,),
 
-              BlocBuilder<HomeBloc,HomeState>(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+              child: TypeAheadField(
+                  textFieldConfiguration: TextFieldConfiguration(
+                    onSubmitted: (String prefix) {
+                      textEditingController.text = prefix;
+                      BlocProvider.of<HomeBloc>(context)
+                          .add(LoadCwEvent(prefix));
+                    },
+                    controller: textEditingController,
+                    style: DefaultTextStyle.of(context).style.copyWith(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      hintText: "Enter a City...",
+                      hintStyle: TextStyle(color: Colors.white),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),),
+                  suggestionsCallback: (String prefix){
+                    return getSuggestionCityUseCase(prefix);
+                  },
+                  itemBuilder: (context, Data model){
+                    return ListTile(
+                      leading: const Icon(Icons.location_on),
+                      title: Text(model.name!),
+                      subtitle: Text("${model.region!}, ${model.country!}"),
+                    );
+                  },
+                  onSuggestionSelected: (Data model){
+                    textEditingController.text = model.name!;
+                    BlocProvider.of<HomeBloc>(context).add(LoadCwEvent(model.name!));
+                  }
+              ),
+            ),
+
+            /// main UI
+            BlocBuilder<HomeBloc,HomeState>(
                 buildWhen: (previous, current){
                   /// rebuild just when CwStatus Changed
                   if(previous.cwStatus == current.cwStatus){
@@ -275,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
 
                 if(state.cwStatus is CwError){
-                  return const Center(child: Text('error'),);
+                  return const Center(child: Text('error',style: TextStyle(color: Colors.white),),);
                 }
 
                 return Container();

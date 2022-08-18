@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_advanced_course/core/resources/data_state.dart';
 import 'package:flutter_advanced_course/features/feature_weather/data/data_source/remote/api_provider.dart';
 import 'package:flutter_advanced_course/features/feature_weather/data/models/current_city_model.dart';
+import 'package:flutter_advanced_course/features/feature_weather/data/models/suggest_city_model.dart';
 import 'package:flutter_advanced_course/features/feature_weather/domain/entities/current_city_entity.dart';
+import 'package:flutter_advanced_course/features/feature_weather/domain/entities/suggest_city_entity.dart';
 import 'package:flutter_advanced_course/features/feature_weather/domain/repository/weather_repository.dart';
 
 import '../../../../core/params/ForecastParams.dart';
@@ -48,5 +50,16 @@ class WeatherRepositoryImpl extends WeatherRepository{
       print(e.toString());
       return const DataFailed("please check your connection...");
     }
+  }
+
+  @override
+  Future<List<Data>> fetchSuggestData(cityName) async {
+
+    Response response = await apiProvider.sendRequestCitySuggestion(cityName);
+
+    SuggestCityEntity suggestCityEntity = SuggestCityModel.fromJson(response.data);
+
+    return suggestCityEntity.data!;
+
   }
 }
