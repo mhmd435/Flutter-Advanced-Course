@@ -8,6 +8,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../core/params/ForecastParams.dart';
+import '../../../../core/utils/date_converter.dart';
 import '../../../../core/widgets/dot_loading_widget.dart';
 import '../../data/models/ForcastDaysModel.dart';
 import '../../data/models/suggest_city_model.dart';
@@ -123,6 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   /// start load Fw event
                   BlocProvider.of<HomeBloc>(context).add(LoadFwEvent(forecastParams));
+
+
+                  /// change Times to Hour --5:55 AM/PM----
+                  final sunrise = DateConverter.changeDtToDateTimeHour(currentCityEntity.sys!.sunrise,currentCityEntity.timezone);
+                  final sunset =  DateConverter.changeDtToDateTimeHour(currentCityEntity.sys!.sunset,currentCityEntity.timezone);
 
                   return Expanded(
                       child: ListView(
@@ -320,6 +326,106 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: double.infinity,
                             ),
                           ),
+
+                          SizedBox(height: 30,),
+
+                          /// last Row
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Text("wind speed",
+                                    style: TextStyle(
+                                      fontSize: height * 0.017, color: Colors.amber,),),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text(
+                                      "${currentCityEntity.wind!.speed!} m/s",
+                                      style: TextStyle(
+                                        fontSize: height * 0.016,
+                                        color: Colors.white,),),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Container(
+                                  color: Colors.white24,
+                                  height: 30,
+                                  width: 2,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Column(
+                                  children: [
+                                    Text("sunrise",
+                                      style: TextStyle(
+                                        fontSize: height * 0.017,
+                                        color: Colors.amber,),),
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(top: 10.0),
+                                      child: Text(sunrise,
+                                        style: TextStyle(
+                                          fontSize: height * 0.016,
+                                          color: Colors.white,),),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Container(
+                                  color: Colors.white24,
+                                  height: 30,
+                                  width: 2,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Column(children: [
+                                  Text("sunset",
+                                    style: TextStyle(
+                                      fontSize: height * 0.017, color: Colors.amber,),),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text(sunset,
+                                      style: TextStyle(
+                                        fontSize: height * 0.016,
+                                        color: Colors.white,),),
+                                  ),
+                                ],),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Container(
+                                  color: Colors.white24,
+                                  height: 30,
+                                  width: 2,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Column(children: [
+                                  Text("humidity",
+                                    style: TextStyle(
+                                      fontSize: height * 0.017, color: Colors.amber,),),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text(
+                                      "${currentCityEntity.main!.humidity!}%",
+                                      style: TextStyle(
+                                        fontSize: height * 0.016,
+                                        color: Colors.white,),),
+                                  ),
+                                ],),
+                              ),
+                            ],),
+
+                          SizedBox(height: 30,),
+
                         ],
                       )
                   );

@@ -10,7 +10,7 @@ class City extends Equatable {
 
   final String name;
 
-  City(this.name);
+  City({required this.name});
 
   @override
   List<Object?> get props => [name];
