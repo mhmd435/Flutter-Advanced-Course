@@ -2,6 +2,8 @@
 import 'package:flutter_advanced_course/features/feature_bookmark/data/data_source/local/database.dart';
 import 'package:flutter_advanced_course/features/feature_bookmark/data/repository/city_repositoryimpl.dart';
 import 'package:flutter_advanced_course/features/feature_bookmark/domain/repository/city_repository.dart';
+import 'package:flutter_advanced_course/features/feature_bookmark/domain/use_cases/delete_city_usecase.dart';
+import 'package:flutter_advanced_course/features/feature_bookmark/domain/use_cases/get_all_city_usecase.dart';
 import 'package:flutter_advanced_course/features/feature_bookmark/presentation/bloc/bookmark_bloc.dart';
 import 'package:flutter_advanced_course/features/feature_weather/data/data_source/remote/api_provider.dart';
 import 'package:flutter_advanced_course/features/feature_weather/data/repository/weather_repositoryImpl.dart';
@@ -31,9 +33,11 @@ setup() async {
   locator.registerSingleton<GetForecastWeatherUseCase>(GetForecastWeatherUseCase(locator()));
   locator.registerSingleton<GetCityUseCase>(GetCityUseCase(locator()));
   locator.registerSingleton<SaveCityUseCase>(SaveCityUseCase(locator()));
+  locator.registerSingleton<GetAllCityUseCase>(GetAllCityUseCase(locator()));
+  locator.registerSingleton<DeleteCityUseCase>(DeleteCityUseCase(locator()));
 
 
 
   locator.registerSingleton<HomeBloc>(HomeBloc(locator(),locator()));
-  locator.registerSingleton<BookmarkBloc>(BookmarkBloc(locator(),locator()));
+  locator.registerSingleton<BookmarkBloc>(BookmarkBloc(locator(),locator(),locator(),locator()));
 }

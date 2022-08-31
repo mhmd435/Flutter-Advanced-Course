@@ -2,10 +2,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_advanced_course/features/feature_bookmark/presentation/bloc/delete_city_status.dart';
+import 'package:flutter_advanced_course/features/feature_bookmark/presentation/bloc/get_all_city_status.dart';
 import 'package:flutter_advanced_course/features/feature_bookmark/presentation/bloc/save_city_status.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/resources/data_state.dart';
+import '../../../../core/usecase/use_case.dart';
+import '../../domain/use_cases/delete_city_usecase.dart';
+import '../../domain/use_cases/get_all_city_usecase.dart';
 import '../../domain/use_cases/get_city_usecase.dart';
 import '../../domain/use_cases/save_city_usecase.dart';
 import 'get_city_status.dart';
@@ -16,12 +21,57 @@ part 'bookmark_state.dart';
 class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   GetCityUseCase getCityUseCase;
   SaveCityUseCase saveCityUseCase;
+  GetAllCityUseCase getAllCityUseCase;
+  DeleteCityUseCase deleteCityUseCase;
 
   BookmarkBloc(
       this.getCityUseCase,
-      this.saveCityUseCase) : super(BookmarkState(
+      this.saveCityUseCase,
+      this.getAllCityUseCase,
+      this.deleteCityUseCase
+      ) : super(BookmarkState(
       getCityStatus: GetCityLoading(),
-      saveCityStatus: SaveCityInitial())) {
+      saveCityStatus: SaveCityInitial(),
+      getAllCityStatus: GetAllCityLoading(),
+      deleteCityStatus: DeleteCityInitial()
+  )) {
+
+    /// City Delete Event
+    on<DeleteCityEvent>((event, emit) async {
+      /// emit Loading state
+      emit(state.copyWith(newDeleteCityStatus: DeleteCityLoading()));
+
+      DataState dataState = await deleteCityUseCase(event.name);
+
+      /// emit Complete state
+      if(dataState is DataSuccess){
+        emit(state.copyWith(newDeleteCityStatus: DeleteCityCompleted(dataState.data)));
+      }
+
+      /// emit Error state
+      if(dataState is DataFailed){
+        emit(state.copyWith(newDeleteCityStatus: DeleteCityError(dataState.error)));
+      }
+    });
+
+    /// get All city
+    on<GetAllCityEvent>((event, emit) async {
+
+      /// emit Loading state
+      emit(state.copyWith(newGetAllCityStatus: GetAllCityLoading()));
+
+      DataState dataState = await getAllCityUseCase(NoParams());
+
+      /// emit Complete state
+      if(dataState is DataSuccess){
+        emit(state.copyWith(newGetAllCityStatus: GetAllCityCompleted(dataState.data)));
+      }
+
+      /// emit Error state
+      if(dataState is DataFailed){
+        emit(state.copyWith(newGetAllCityStatus: GetAllCityError(dataState.error)));
+      }
+    });
 
 
     /// get city By name event
