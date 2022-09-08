@@ -1,17 +1,16 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_course/features/feature_bookmark/domain/entities/city_entity.dart';
 import 'package:flutter_advanced_course/features/feature_bookmark/presentation/bloc/bookmark_bloc.dart';
+import 'package:flutter_advanced_course/features/feature_bookmark/presentation/bloc/get_city_status.dart';
+import 'package:flutter_advanced_course/features/feature_bookmark/presentation/bloc/save_city_status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../feature_bookmark/domain/entities/city_entity.dart';
-import '../../../feature_bookmark/presentation/bloc/get_city_status.dart';
-import '../../../feature_bookmark/presentation/bloc/save_city_status.dart';
 
 
 class BookMarkIcon extends StatelessWidget {
   final String name;
 
-  const BookMarkIcon({Key? key, required this.name}) : super(key: key);
+  const BookMarkIcon({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +39,8 @@ class BookMarkIcon extends StatelessWidget {
           if(state.getCityStatus is GetCityCompleted){
 
             /// casting for Getting city
-            GetCityCompleted getCityCompleted = state.getCityStatus as GetCityCompleted;
-            City? city = getCityCompleted.city;
+            final GetCityCompleted getCityCompleted = state.getCityStatus as GetCityCompleted;
+            final City? city = getCityCompleted.city;
 
             return BlocConsumer<BookmarkBloc, BookmarkState>(
               listenWhen: (previous, current){
@@ -63,23 +62,23 @@ class BookMarkIcon extends StatelessWidget {
                 /// show Error as SnackBar
                 if (cityState.saveCityStatus is SaveCityError) {
                   /// cast for getting Error
-                  SaveCityError saveCityError = cityState.saveCityStatus as SaveCityError;
+                  final SaveCityError saveCityError = cityState.saveCityStatus as SaveCityError;
 
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(saveCityError.message!),
                     behavior: SnackBarBehavior.floating, // Add this line
-                  ));
+                  ),);
                 }
 
                 /// show Success SnackBar
                 if (cityState.saveCityStatus is SaveCityCompleted) {
                   /// cast for getting Data
-                  SaveCityCompleted saveCityCompleted = cityState.saveCityStatus as SaveCityCompleted;
+                  final SaveCityCompleted saveCityCompleted = cityState.saveCityStatus as SaveCityCompleted;
 
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("${saveCityCompleted.city.name} Added to Bookmark"),
                     behavior: SnackBarBehavior.floating, // Add this line
-                  ));
+                  ),);
                 }
               },
               builder: (context, cityState) {
@@ -91,7 +90,7 @@ class BookMarkIcon extends StatelessWidget {
                         /// call event for save Current City in Database
                         BlocProvider.of<BookmarkBloc>(context).add(SaveCwEvent(name));
                       },
-                      icon: Icon(city == null ? Icons.star_border : Icons.star, color: Colors.white, size: height * 0.04,));
+                      icon: Icon(city == null ? Icons.star_border : Icons.star, color: Colors.white, size: height * 0.04,),);
                 }
 
                 /// show UI for Loading SaveCity
@@ -105,7 +104,7 @@ class BookMarkIcon extends StatelessWidget {
                       /// call event for save Current City in Database
                       BlocProvider.of<BookmarkBloc>(context).add(SaveCwEvent(name));
                     },
-                    icon: const Icon(Icons.star, color: Colors.white, size: 35,));
+                    icon: const Icon(Icons.star, color: Colors.white, size: 35,),);
 
               },
             );
@@ -120,12 +119,12 @@ class BookMarkIcon extends StatelessWidget {
                   //   behavior: SnackBarBehavior.floating, // Add this line
                   // ));
                 },
-                icon: const Icon(Icons.error,color: Colors.white,size: 35));
+                icon: const Icon(Icons.error,color: Colors.white,size: 35),);
           }
 
           /// default value
           return Container();
-        }
+        },
     );
   }
 }

@@ -19,9 +19,7 @@ class BookMarkScreen extends StatelessWidget {
 
     BlocProvider.of<BookmarkBloc>(context).add(GetAllCityEvent());
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: BlocBuilder<BookmarkBloc,BookmarkState>(
+    return BlocBuilder<BookmarkBloc,BookmarkState>(
         buildWhen: (previous, current) {
           /// rebuild UI just when allCityStatus Changed
           if (current.getAllCityStatus == previous.getAllCityStatus) {
@@ -146,7 +144,6 @@ class BookMarkScreen extends StatelessWidget {
           /// show Default value
           return Container();
         },
-      ),
-    );
+      );
   }
 }

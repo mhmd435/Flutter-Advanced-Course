@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../../../core/params/ForecastParams.dart';
-import '../../../../core/utils/date_converter.dart';
+import 'package:flutter_advanced_course/core/params/ForecastParams.dart';
+import 'package:flutter_advanced_course/core/utils/date_converter.dart';
 import '../../../../core/widgets/dot_loading_widget.dart';
 import '../../../feature_bookmark/presentation/bloc/bookmark_bloc.dart';
 import '../../data/models/ForcastDaysModel.dart';
